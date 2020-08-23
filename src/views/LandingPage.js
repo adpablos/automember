@@ -25,14 +25,13 @@ import {
   CardBody,
   CardFooter,
   CardTitle,
-  Form,
-  Input,
   InputGroupAddon,
   InputGroupText,
   InputGroup,
   Container,
   Row,
   Col,
+  Input,
 } from "reactstrap";
 
 // core components
@@ -42,8 +41,13 @@ import DemoFooter from "components/Footers/DemoFooter.js";
 // i18n components
 import {useTranslation} from "react-i18next";
 
+import { Formik, Form, Field } from 'formik';
+import axios from 'axios'
+
 function LandingPage() {
   const { t } = useTranslation(['translation', 'home']);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
   document.documentElement.classList.remove("nav-open");
   React.useEffect(() => {
     document.body.classList.add("profile-page");
@@ -52,22 +56,22 @@ function LandingPage() {
     };
   });
   return (
-    <>
-      <ExamplesNavbar />
-      <LandingPageHeader />
-      <div className="main">
-        <div className="section text-center">
-          <Container>
-            <Row>
-              <Col className="ml-auto mr-auto" md="8">
-                <h2 className="title">{t('home:product.header', 'Let\'s talk product')}</h2>
-                <h5 className="description">
-                  {t('home:product.description', 'Automember is a SAAS which allows you to forget taking care of the managemenet of your private slack community. You will only need to indicate your information about your Stripe and Slack connection, and AutoMember will do all the dirty work for you. You will never need to take care manually of your members in your community, paying attention to whom is not anymore paying in your membership site.')}
-                </h5>
-                <br />
-              </Col>
-            </Row>
- {/*           <br />
+      <>
+        <ExamplesNavbar />
+        <LandingPageHeader />
+        <div className="main">
+          <div className="section text-center">
+            <Container>
+              <Row>
+                <Col className="ml-auto mr-auto" md="8">
+                  <h2 className="title">{t('home:product.header', 'Let\'s talk product')}</h2>
+                  <h5 className="description">
+                    {t('home:product.description', 'Automember is a SAAS which allows you to forget taking care of the managemenet of your private slack community. You will only need to indicate your information about your Stripe and Slack connection, and AutoMember will do all the dirty work for you. You will never need to take care manually of your members in your community, paying attention to whom is not anymore paying in your membership site.')}
+                  </h5>
+                  <br />
+                </Col>
+              </Row>
+              {/*           <br />
             <br />
             <Row>
               <Col md="3">
@@ -139,144 +143,166 @@ function LandingPage() {
                 </div>
               </Col>
             </Row>*/}
-          </Container>
-        </div>
-        <div className="section section-dark text-center">
-          <Container>
-            <h2 className="title">{t('home:aboutUs.header', 'Let\'s talk about us')}</h2>
-            <Row>
-              <Col md="6">
-                <Card className="card-profile card-plain">
-                  <div className="card-avatar">
-                    <a href="#" onClick={(e) => e.preventDefault()}>
-                      <img
-                        alt="..."
-                        src={require("assets/img/faces/alex.jpg")}
-                      />
-                    </a>
-                  </div>
-                  <CardBody>
-                    <a href="#" onClick={(e) => e.preventDefault()}>
-                      <div className="author">
-                        <CardTitle tag="h4">Alex de Pablos</CardTitle>
-                      </div>
-                    </a>
-                    <p className="card-description text-center">{t('home:aboutUs.member1description', 'Solid believer of ´never stop learning´. On top of that, I am a Software Engineer and a Marketing Online enthusiast.')}
-                    </p>
-                  </CardBody>
-                  <CardFooter className="text-center">
-                    <Button
-                      className="btn-just-icon btn-neutral"
-                      color="link"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i className="fa fa-twitter" />
-                    </Button>
-                    <Button
-                      className="btn-just-icon btn-neutral ml-1"
-                      color="link"
-                      href="#"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i className="fa fa-linkedin" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Col>
-              <Col md="6">
-                <Card className="card-profile card-plain">
-                  <div className="card-avatar">
-                    <a href="#" onClick={(e) => e.preventDefault()}>
-                      <img
-                        alt="..."
-                        src={require("assets/img/faces/dani.jpeg")}
-                      />
-                    </a>
-                  </div>
-                  <CardBody>
-                    <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      <div className="author">
-                        <CardTitle tag="h4">Dani Ayuso</CardTitle>
-                      </div>
-                    </a>
-                    <p className="card-description text-center"> {t('home:aboutUs.member2description', 'CTO, IT & Web Development. Pasionate of every technicall challenge.')}
-                    </p>
-                  </CardBody>
-                  <CardFooter className="text-center">
-                    <Button
-                      className="btn-just-icon btn-neutral"
-                      color="link"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i className="fa fa-twitter" />
-                    </Button>
-                    <Button
-                      className="btn-just-icon btn-neutral ml-1"
-                      color="link"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <i className="fa fa-linkedin" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        </div>
-        <div name="contact" className="section landing-section">
-          <Container>
-            <Row>
-              <Col className="ml-auto mr-auto" md="8">
-                <h2 className="text-center">{t('home:contact.header', 'Keep in touch?')}</h2>
-                <Form className="contact-form">
-                  <Row>
-                    <Col md="6">
-                      <label>{t('home:contact.name.main', 'Name')}</label>
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="nc-icon nc-single-02" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input placeholder={t('home:contact.name.placeholder', 'Name')} type="text" />
-                      </InputGroup>
-                    </Col>
-                    <Col md="6">
-                      <label>{t('home:contact.email.main', 'Email')}</label>
-                      <InputGroup>
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="nc-icon nc-email-85" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input placeholder={t('home:contact.email.placeholder', 'Email')} type="text" />
-                      </InputGroup>
-                    </Col>
-                  </Row>
-                  <label>{t('home:contact.message.main', 'Message')}</label>
-                  <Input
-                    placeholder={t('home:contact.message.placeholder', 'Tell us your thoughts and feelings...')}
-                    type="textarea"
-                    rows="4"
-                  />
-                  <Row>
-                    <Col className="ml-auto mr-auto" md="4">
-                      <Button className="btn-fill" color="danger" size="lg">
-                        {t('home:contact.send', 'Send Message')}
+            </Container>
+          </div>
+          <div className="section section-dark text-center">
+            <Container>
+              <h2 className="title">{t('home:aboutUs.header', 'Let\'s talk about us')}</h2>
+              <Row>
+                <Col md="6">
+                  <Card className="card-profile card-plain">
+                    <div className="card-avatar">
+                      <a href="#" onClick={(e) => e.preventDefault()}>
+                        <img
+                            alt="..."
+                            src={require("assets/img/faces/alex.jpg")}
+                        />
+                      </a>
+                    </div>
+                    <CardBody>
+                      <a href="#" onClick={(e) => e.preventDefault()}>
+                        <div className="author">
+                          <CardTitle tag="h4">Alex de Pablos</CardTitle>
+                        </div>
+                      </a>
+                      <p className="card-description text-center">{t('home:aboutUs.member1description', 'Solid believer of ´never stop learning´. On top of that, I am a Software Engineer and a Marketing Online enthusiast.')}
+                      </p>
+                    </CardBody>
+                    <CardFooter className="text-center">
+                      <Button
+                          className="btn-just-icon btn-neutral"
+                          color="link"
+                          href="#pablo"
+                          onClick={(e) => e.preventDefault()}
+                      >
+                        <i className="fa fa-twitter" />
                       </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
+                      <Button
+                          className="btn-just-icon btn-neutral ml-1"
+                          color="link"
+                          href="#"
+                          onClick={(e) => e.preventDefault()}
+                      >
+                        <i className="fa fa-linkedin" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Col>
+                <Col md="6">
+                  <Card className="card-profile card-plain">
+                    <div className="card-avatar">
+                      <a href="#" onClick={(e) => e.preventDefault()}>
+                        <img
+                            alt="..."
+                            src={require("assets/img/faces/dani.jpeg")}
+                        />
+                      </a>
+                    </div>
+                    <CardBody>
+                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                        <div className="author">
+                          <CardTitle tag="h4">Dani Ayuso</CardTitle>
+                        </div>
+                      </a>
+                      <p className="card-description text-center"> {t('home:aboutUs.member2description', 'CTO, IT & Web Development. Pasionate of every technicall challenge.')}
+                      </p>
+                    </CardBody>
+                    <CardFooter className="text-center">
+                      <Button
+                          className="btn-just-icon btn-neutral"
+                          color="link"
+                          href="#pablo"
+                          onClick={(e) => e.preventDefault()}
+                      >
+                        <i className="fa fa-twitter" />
+                      </Button>
+                      <Button
+                          className="btn-just-icon btn-neutral ml-1"
+                          color="link"
+                          href="#pablo"
+                          onClick={(e) => e.preventDefault()}
+                      >
+                        <i className="fa fa-linkedin" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Col>
+              </Row>
+            </Container>
+          </div>
+          <div name="contact" className="section landing-section">
+            <Container>
+              <Row>
+                <Col className="ml-auto mr-auto" md="8">
+                  <h2 className="text-center">{t('home:contact.header', 'Keep in touch?')}</h2>
+                  <Formik
+                      initialValues={{
+                        firstName: '',
+                        email: '',
+                        message: '',
+                      }}
+                      onSubmit={async values => {
+                        await sleep(500);
+                        axios({
+                          method: "POST",
+                          url:"http://localhost:3002/send",
+                          data:  values
+                        }).then((response)=>{
+                          if (response.data.status === 'success'){
+                            alert("Message Sent.");
+                            this.resetForm()
+                          }else if(response.data.status === 'fail'){
+                            alert("Message failed to send.")
+                          }
+                        })
+                        alert(JSON.stringify(values, null, 2));
+                      }}
+                  >
+                    {({ isSubmitting }) => (
+                        <Form className="contact-form">
+                          <Row>
+                            <Col md="6">
+                              <label>{t('home:contact.name.main', 'Name')}</label>
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                  <InputGroupText>
+                                    <i className="nc-icon nc-single-02" />
+                                  </InputGroupText>
+                                </InputGroupAddon>
+                                <Field class="form-control" name="firstName" placeholder={t('home:contact.name.placeholder', 'Name')} />
+                              </InputGroup>
+                            </Col>
+                            <Col md="6">
+                              <label>{t('home:contact.email.main', 'Email')}</label>
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                  <InputGroupText>
+                                    <i className="nc-icon nc-email-85" />
+                                  </InputGroupText>
+                                </InputGroupAddon>
+                                <Field class="form-control" name="email" placeholder={t('home:contact.email.placeholder', 'Email')} type="email" />
+                              </InputGroup>
+                            </Col>
+                          </Row>
+                          <label>{t('home:contact.message.main', 'Message')}</label>
+                          <Field class="form-control" name="message" component="textarea" placeholder={t('home:contact.message.placeholder', 'Tell us your thoughts and feelings...')} rows="4"/>
+                          <Row>
+                            <Col className="ml-auto mr-auto" md="4">
+                              <Button className="btn-fill" color="danger" size="lg" type="submit" disabled={isSubmitting}>
+                                {t('home:contact.send', 'Send Message')}
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Form>
+                    )}
+                  </Formik>
+                </Col>
+              </Row>
+            </Container>
+          </div>
         </div>
-      </div>
-      <DemoFooter />
-    </>
+        <DemoFooter />
+      </>
   );
 }
 

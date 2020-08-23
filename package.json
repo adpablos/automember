@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.20.0",
     "classnames": "2.2.6",
+    "formik": "latest",
     "i18next": "^19.1.0",
     "i18next-browser-languagedetector": "^4.0.1",
     "i18next-locize-backend": "^3.0.0",
@@ -19,7 +21,8 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "^3.4.3",
-    "reactstrap": "8.4.1"
+    "reactstrap": "8.4.1",
+    "typescript": "3.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -53,5 +56,18 @@
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
     "i18next-parser": "^1.0.2"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adpablos/automember.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adpablos/automember/issues"
+  },
+  "homepage": "https://github.com/adpablos/automember#readme"
 }
